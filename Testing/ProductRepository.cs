@@ -20,5 +20,9 @@ namespace Testing
             return _connection.Query<Product>("SELECT * FROM products;");
         }
 
+        public Product GetProduct(int id)
+        {       //parameterized queries help sanitize inputs and prevent SQL injection
+            return _connection.QuerySingle<Product>("SELECT * FROM products WHERE PRODUCTID = @id", new { id = id });
+        }
     }
 }
