@@ -30,10 +30,18 @@ namespace Testing
             _connection.Execute("UPDATE products SET Name = @name, Price = @price WHERE ProductID = @id", 
                 new { name = product.Name, price = product.Price, id = product.ProductID });
         }
+
         public void InsertProduct(Product productToInsert)
         {
             _connection.Execute("INSERT INTO products (NAME, PRICE, CATEGORYID) VALUES (@name, @price, @categoryID);",
                 new { name = productToInsert.Name, price = productToInsert.Price, categoryID = productToInsert.CategoryID });
+        }
+
+        void IProductRepository.DeleteProduct(Product product)
+        {
+            _connection.Execute("DELETE FROM products WHERE PRODUCTID = @id;", new { id = product.ProductID });
+            _connection.Execute("DELETE FROM sales WHERE PRODUCTID = @id;", new { id = product.ProductID });
+            _connection.Execute("DELETE FROM reviews WHERE PRODUCTID = @id;", new { id = product.ProductID }); 
         }
 
         public Product AssignCategory()
